@@ -12,7 +12,7 @@ function getParams() {
 function solve() {
      const p = getParams();
      let result = [];
-      if (p.length === 0) {
+     if (p.length === 0) {
         return result;
      } 
      let D = p[1] * p[1] - 4 * p[0] * p[2];

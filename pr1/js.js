@@ -36,16 +36,12 @@ if (age<18) {
     adult = `${not}${adult}`;
 } 
 
-let child = confirm('У вас есть дети?');
-
-child ? child = prompt ('Сколько?:'):child = ('нет');
-
-child === 1 ? child = (child +' ребенок'):child = (child +' детей');
+let child = confirm('У вас есть дети?') ? prompt('Сколько?:'):'нет';
 
 alert (`
 ваше ФИО: ${LastName} ${name} ${SecondName}
 пол: ${gender}
 вам ${age} лет и ${month}
 вы ${adult}
-у вас ${child}
+у вас детей: ${child}
 `)
