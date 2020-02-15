@@ -1,27 +1,40 @@
-function HashStorageFunc() {
-  let obj = {};
+function HashStorageFunc(){
+  this._obj = {};
   this.addValues = function (key, values) {
-    obj[key] = values;
-  }
+      this._obj[key] = values;
+  };
   this.getValue = function (key) {
-    return obj[key];
-  }
+      return this._obj[key];
+  };
   this.deleteValue = function (key) {
-    if ([key] in obj) {
-      delete obj[key];
-      return true;
-    } else {
-      return false;
-    }
-  }
+      if ([key] in this._obj) {
+          delete this._obj[key];
+          return true;
+      } else {
+          return false;
+      }
+  };
   this.getKeys = function () {
-    return Object.keys(obj);
-  }
+      return Object.keys(this._obj);
+  };
 }
 
-let drinkStorage = new HashStorageFunc();
+function ClassA(){
+  HashStorageFunc.call(this);
+  this.addAlc = function(key){
+      this._obj[key] = `${this._obj[key]}; алкогольный: да`;
+  };
+}
 
-drinkStorage.addValues('Маргарита', 'алкогольный, рецепт: продукт, продукт, продукт...');
-drinkStorage.addValues('Напиток', 'безалкогольный, рецепт: продукт, продукт, продукт...');
-console.log(drinkStorage.getKeys());
-console.log(drinkStorage.getValue('Маргарита'));
+function ClassB(){
+  HashStorageFunc.call(this);
+  let clear = this.deleteValue;
+  this.deleteValue = function(){
+      clear.call(this);
+      this._obj = {};
+  };
+}
+
+let classA = new ClassA();
+let classB = new ClassB();
+let drinkStorage = new HashStorageFunc();
