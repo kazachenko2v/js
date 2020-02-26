@@ -1,70 +1,105 @@
 function dynForm(arr){
     let form = document.createElement('form');
     document.body.append(form);
+    // onsubmit="validate(form1);return false"
+    form.setAttribute('onsubmit', 'validate(formDef1);return false');
+    // document.forms[0].setAttribute('onsubmit', 'validate(formDef1);return false');
+    // document.forms[1].setAttribute('onsubmit', 'validate(formDef2);return false');
+    // form[1].setAttribute('onsubmit', 'validate(form2);return false');
     for(let i in arr){
-        if(typeof arr[i] === 'object'){
-            if(arr[i].hasOwnProperty('label')){
-                let leb = document.createElement('label');
-                form.append(leb);
-                let span = document.createElement('span');
-                span.append(arr[i].label);
-                let input = document.createElement('input');
-                let textarea = document.createElement('textarea');
-                leb.classList.add('label-class');
-                leb.append(span);
-                span.classList.add('left-col')
-                if(arr[i].kind === 'submit'){
-                    input.setAttribute('type', 'submit');
-                    input.setAttribute('value', arr[i].label);
-                }
-                switch (arr[i].kind){
-                    case 'longtext':
-                        leb.append(input);
-                        input.classList.add('right-col');
-                        break;
-                    case 'number':
-                        leb.append(input);
-                        input.classList.add('right-col-num');
-                        input.setAttribute('type', 'number');
-                        break;
-                    case 'shorttext':
-                        leb.append(input);
-                        input.classList.add('right-col-short');
-                        break;
-                    case 'combo':
-                        let select = document.createElement('select');
-                        leb.append(select);
-                        let option = new Option(arr[i].variants[0].text, 1);
-                        let option1 = new Option(arr[i].variants[1].text, 2);
-                        let option2 = new Option(arr[i].variants[2].text, 3);
-                        select.append(option);
-                        select.append(option1);
-                        select.append(option2);
-                        break;
-                    case 'radio':
-                        leb.append(input);
-                        input.setAttribute('type', 'radio');
-                        
-                        break;
-                    case 'check':
-                        leb.append(input);
-                        input.setAttribute('type', 'checkbox');
-                        break;
-                    case 'memo':
-                        leb.classList.add('label-class-textarea');
-                        leb.append(textarea);
-                        textarea.classList.add('textarea');
-                        textarea.setAttribute('rows', 4);
-                        break;
-                    case 'submit':
-                        leb.removeChild(span);
-                        leb.append(input);
-                        break;
-                }
-            }
+        let leb = document.createElement('label');
+        form.append(leb);
+        let span = document.createElement('span');
+        span.append(arr[i].label);
+        let input = document.createElement('input');
+        input.setAttribute('name', arr[i].name);
+        leb.classList.add('label-class');
+        leb.append(span);
+        span.classList.add('left-col')
+        if(arr[i].kind === 'submit'){
+            input.setAttribute('type', 'submit');
+            input.setAttribute('value', arr[i].label);
         }
+        switch (arr[i].kind){
+            case 'longtext':
+                leb.append(input);
+                input.classList.add('right-col');
+                break;
+            case 'number':
+                leb.append(input);
+                input.classList.add('right-col-num');
+                input.setAttribute('type', 'number');
+                break;
+            case 'shorttext':
+                leb.append(input);
+                input.classList.add('right-col-short');
+                break;
+            case 'combo':
+                let select = document.createElement('select');
+                leb.append(select);
+                for (let j = 0; j < arr[i].variants.length; j++){
+                    let option = document.createElement('option');
+                    select.append(option);
+                    option.append(arr[i].variants[j].text);
+                    option.setAttribute('value', arr[i].variants[j].value);
+                    
+                };
+                break;
+            case 'radio':
+                for (let j = 0; j < arr[i].variants.length; j++){
+                    let inputRadio = document.createElement('input');
+                    leb.append(inputRadio);
+                    inputRadio.after(arr[i].variants[j].text);
+                    inputRadio.setAttribute('type', 'radio');
+                    inputRadio.setAttribute('value', arr[i].variants[j].value);
+                    inputRadio.setAttribute('name', 'payment');  
+                };
+                break;
+            case 'check':
+                leb.append(input);
+                input.setAttribute('type', 'checkbox');
+                break;
+            case 'memo':
+                let textarea = document.createElement('textarea');
+                leb.classList.add('label-class-textarea');
+                leb.append(textarea);
+                textarea.classList.add('textarea');
+                textarea.setAttribute('rows', 4);
+                break;
+            case 'submit':
+                leb.removeChild(span);
+                leb.append(input);
+                break;
+        }
+        // input.onblur = function() {
+        //     if (input.value === '') {
+        //         input.classList.add('error-border');
+        //         // input.setAttribute('value', 'vvedite text'); 
+        //     }
+        // };
+          
+        // input.onfocus = function() {
+        //     if (input.classList.contains('error-border')) {
+        //         // input.classList.remove('error-border');
+        //         // input.setAttribute('value', ''); 
+        //     }
+        // };    
     }
 }
+
+
+function validate(form){
+    let elems = form.elements;
+    // alert(input.sitename.value)
+    if (!elems.sitename.value) {//первочанальное состояние = сброс ошибки. Дальше проверка полей на "пустоту"
+      alert('qwe')
+    };
+}
+
+
+
+
+
 
 let formDef1=
 [
@@ -91,4 +126,4 @@ let formDef2=
 ];
 
 dynForm(formDef1);
-dynForm(formDef2);
+// dynForm(formDef2);
