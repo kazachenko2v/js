@@ -1,11 +1,6 @@
 function dynForm(arr){
     let form = document.createElement('form');
     document.body.append(form);
-    // onsubmit="validate(form1);return false"
-    form.setAttribute('onsubmit', 'validate(formDef1);return false');
-    // document.forms[0].setAttribute('onsubmit', 'validate(formDef1);return false');
-    // document.forms[1].setAttribute('onsubmit', 'validate(formDef2);return false');
-    // form[1].setAttribute('onsubmit', 'validate(form2);return false');
     for(let i in arr){
         let leb = document.createElement('label');
         form.append(leb);
@@ -42,7 +37,6 @@ function dynForm(arr){
                     select.append(option);
                     option.append(arr[i].variants[j].text);
                     option.setAttribute('value', arr[i].variants[j].value);
-                    
                 };
                 break;
             case 'radio':
@@ -70,35 +64,9 @@ function dynForm(arr){
                 leb.removeChild(span);
                 leb.append(input);
                 break;
-        }
-        // input.onblur = function() {
-        //     if (input.value === '') {
-        //         input.classList.add('error-border');
-        //         // input.setAttribute('value', 'vvedite text'); 
-        //     }
-        // };
-          
-        // input.onfocus = function() {
-        //     if (input.classList.contains('error-border')) {
-        //         // input.classList.remove('error-border');
-        //         // input.setAttribute('value', ''); 
-        //     }
-        // };    
+        }  
     }
 }
-
-
-function validate(form){
-    let elems = form.elements;
-    // alert(input.sitename.value)
-    if (!elems.sitename.value) {//первочанальное состояние = сброс ошибки. Дальше проверка полей на "пустоту"
-      alert('qwe')
-    };
-}
-
-
-
-
 
 
 let formDef1=
@@ -126,4 +94,4 @@ let formDef2=
 ];
 
 dynForm(formDef1);
-// dynForm(formDef2);
+dynForm(formDef2);

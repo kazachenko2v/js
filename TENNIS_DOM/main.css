@@ -1,0 +1,33 @@
+#field {
+    width: 600px;
+    height: 300px;
+    background-color: orange;
+    position: relative;
+}
+
+.raq {
+    width: 10px;
+    height: 100px;
+    background-color: red;
+    position: absolute;
+}
+
+#leftraq {
+    left: 0;
+    top: 100px;
+}
+
+#rightraq {
+    right: 0;
+    top: 100px;
+}
+
+#ball {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}

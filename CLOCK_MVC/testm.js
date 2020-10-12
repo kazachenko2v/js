@@ -3,8 +3,9 @@
 function Clock(){
     this.X = 0;
     this.Y = 0;
-
+    
     let myView = null;
+    let timerId = null;
 
     this.init = function(view) {
         myView = view;
@@ -12,32 +13,10 @@ function Clock(){
 
     this.updateView = function() {
         if (myView)
-                myView.update();
+            myView.update();
     };
-  
-    // setInterval(function() {
-    //     let now = new Date();
-    //     let sec = now.getSeconds();
-    //     let min = now.getMinutes();
-    //     let hr = now.getHours(); 
-    //     this.X = 300 + 250 * Math.cos(Math.PI/2 - (sec*6)*(Math.PI/180));
-    //     this.Y = 300 - 250 * Math.sin(Math.PI/2 - (sec*6)*(Math.PI/180));
-    //     this.updateView();
-    // }, 1000);
 
-    // this.start = function(){
-    //     this.qwe = setInterval(function () {
-    //         let now = new Date();
-    //         let sec = now.getSeconds();
-    //         let min = now.getMinutes();
-    //         let hr = now.getHours(); 
-    //         this.X = 300 + 250 * Math.cos(Math.PI/2 - (sec*6)*(Math.PI/180));
-    //         this.Y = 300 - 250 * Math.sin(Math.PI/2 - (sec*6)*(Math.PI/180));
-    //     }, 1000)
-    //     this.updateView();
-    // };
-
-    this.start = function(){
+    this.drawHands = function(){
         let now = new Date();
         let sec = now.getSeconds();
         // let min = now.getMinutes();
@@ -45,45 +24,39 @@ function Clock(){
         this.X = 300 + 250 * Math.cos(Math.PI/2 - (sec*6)*(Math.PI/180));
         this.Y = 300 - 250 * Math.sin(Math.PI/2 - (sec*6)*(Math.PI/180));
         this.updateView();
-        // let timerId = setInterval(this.start.bind(this), 1000);
-        // return timerId;
-        
     };
 
-    // this.move = function(){
-    //     let timerId = setInterval(this.start.bind(this), 1000);
-    //     return timerId;
-    // }
+    this.start = function(){
+        timerId = setInterval(this.drawHands.bind(this), 1000);
+    };
 
     this.stop = function(){
-        console.log(this.start())
-        clearInterval(this.start());
-        let now = new Date();
-        let sec = now.getSeconds();
-        let min = now.getMinutes();
-        let hr = now.getHours(); 
-        this.X = 300 + 250 * Math.cos(Math.PI/2 - (sec*6)*(Math.PI/180));
-        this.Y = 300 - 250 * Math.sin(Math.PI/2 - (sec*6)*(Math.PI/180));
+        clearInterval(timerId);
         this.updateView();
     };
-}
+};
 
 // view
 
 function ClockViewCanvas(){
 
     let myModel = null;
-    let myField = null;
+    let myDrawClockFunc = null;
 
-    this.init = function(model, field){
+    this.init = function(model, drawClockFunc){
         myModel = model;
-        myField = field;
+        myDrawClockFunc = drawClockFunc;
+        // draw();
     };
+
+    // draw = function(){
+    //     myDrawClockFunc(myModel.X, myModel.Y);
+    // }
 
     this.update = function(){
-        myField(myModel.X, myModel.Y)
+        myDrawClockFunc(myModel.X, myModel.Y);
     };
-}
+};
 
 // Controller
 
@@ -107,10 +80,11 @@ function ManControllerButtons(){
     this.stop = function(){
         myModel.stop();
     };
-}
+};
 
-function createClockSvg(x,y){ 
-    let svg = document.getElementById('svg');
+function createClockSvg(x,y){
+    let svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    document.body.append(svg);
     svg.setAttribute('width', '600');
     svg.setAttribute('height', '600');
     let circle = document.createElementNS("http://www.w3.org/2000/svg",'circle');
@@ -173,16 +147,15 @@ function createClockSvg(x,y){
     hourLine.setAttribute('y2', '150');
     hourLine.setAttribute('stroke', 'black');
     hourLine.setAttribute('transform-origin', '50% 50%');
-}
+};
 
-function createClockCanvas(x,y) {
-    
-    // let canvas = document.createElement('canvas');
-    // document.body.append(canvas);
-    // canvas.setAttribute('width', '600');
-    // canvas.setAttribute('height', '600');
-    let ctx = document.getElementById("canvas").getContext('2d');
-    // let ctx = canvas.getContext('2d');
+function createClockCanvas(x,y){  
+    let canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    canvas.setAttribute('width', '600');
+    canvas.setAttribute('height', '600');
+    // let ctx = document.getElementById("canvas").getContext('2d');
+    let ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,600,600);
     ctx.beginPath();
     ctx.arc(300, 300, 300, 0, 2 * Math.PI, true);
@@ -222,8 +195,7 @@ function createClockCanvas(x,y) {
     // ctx.lineTo(300, 100);
     // ctx.stroke();
     // ctx.closePath();
-}
-
+};
 
 let man = new Clock();
 let view = new ClockViewCanvas();
@@ -231,5 +203,15 @@ let controller = new ManControllerButtons();
 
 man.init(view);
 view.init(man, createClockCanvas);
-controller.init(man)
+controller.init(man);
+
+let man2 = new Clock();
+let view2 = new ClockViewCanvas();
+let controller2 = new ManControllerButtons();
+
+man2.init(view2);
+view2.init(man2, createClockCanvas);
+controller2.init(man2);
+
+
 

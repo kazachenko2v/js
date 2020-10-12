@@ -1,39 +1,47 @@
 class HashStorageFunc{
   constructor(){
-    this._obj = {};
+    this.obj = {};
   }
   addValues(key, values){
-    this._obj[key] = values;
+    this.obj[key] = values;
   }
   getValue(key){
-    return this._obj[key];
+    return this.obj[key];
   }
   deleteValue(key){
-    if ([key] in this._obj){
-      delete this._obj[key];
+    if ([key] in this.obj){
+      delete this.obj[key];
       return true;
     } else {
       return false;
     }
   }
   getKeys(){
-    return Object.keys(this._obj);
+    return Object.keys(this.obj);
   }
 }
 
 class ClassA extends HashStorageFunc{
   addAlc(key){
-    this._obj[key] = `${this._obj[key]}; алкогольный: да`;
+    this.obj[key] = `${this.obj[key]}; алкогольный: да`;
   }
 }
 
 class ClassB extends HashStorageFunc{
-  addAlc(key){
-    super.getValue(key)
-    this._obj[key] = `алкогольный: да`;
+  deleteValue(key){
+    super.deleteValue(key)
+    console.log(`напиток ${key} удален`);
   }
 }
 
 let classA = new ClassA();
 let classB = new ClassB();
 let drinkStorage = new HashStorageFunc();
+
+
+classB.addValues('1', 'qew');
+classB.addValues('2', 'asd');
+classB.addValues('3', 'zxc');
+console.log(classB.getKeys());
+classB.deleteValue('1');
+console.log(classB.getKeys());
